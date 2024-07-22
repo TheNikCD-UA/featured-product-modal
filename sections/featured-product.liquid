@@ -475,6 +475,19 @@
             <div class="featured_modal__list">
             {% for featured in section.settings.modal_products %}
                 <div class="featured_modal__list-item">
+                    <div class="featured_modal__list-item__img">
+                        {{ featured | image_url: width: 250 | image_tag }}
+                    </div>
+                    <div class="featured_modal__list-item__content">
+                        <h4>{{ featured.title }}</h4>
+                        {{ featured.description }}
+                        <p class="featured_modal__list-item__sku" data-variant-id="{{ featured.variants.first.id }}">SKU: {{ featured.id }}</p>
+                        <div class="featured_modal__list-item__prices">
+                            <span class="featured_modal__list-item__finalprice">{{ featured.price | money }}</span> <span class="featured_modal__list-item__oldprice">{{ featured.compare_at_price
+                             | money }}</span>
+                         </div>
+                    </div>
+                </div>
             {% endfor %}
           </div>
           <div class="featured_modal__buttons">
