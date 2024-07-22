@@ -214,3 +214,33 @@
     z-index: 1;
   }
 }
+
+@media (max-width: 1100px) {
+  #featured_modal__wrapper {
+    align-items: left;
+    max-height: 100vh;
+    width: auto;
+    height: auto;
+    flex-direction: column;
+  }
+
+  .featured_modal__photo {
+    width: 100%;
+    max-height: 300px;
+  }
+
+  .featured_modal__text {
+    width: auto;
+    padding-top: 20px;
+  }
+}
+
+@media (min-width: 1100px) and (max-width: 1336px) {
+  .featured_modal__buttons-add-to-cart {
+    width: 100px;
+  }
+  
+  .featured_modal__buttons-continue-to-cart {
+    width: 150px;
+  }
+}
