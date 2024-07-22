@@ -456,11 +456,25 @@
             <h3 class="featured_modal__heading">{{ section.settings.modal_heading }}</h3>
             <div class="featured_modal__info">
                 <p>You are trying to add <span class="featured_modal__product-title">{{ product.title }}</span> to the cart.</p>
+                {% for featured in section.settings.modal_products %}
+
+                  {% assign regular_price = featured.price | money_format %}
+                  {% assign regular_price_number = regular_price | remove_tags | to_number %}
+                  {% assign total_regular_price = total_regular_price | plus: regular_price_number %}
+
+                  {% assign compare_at_price = featured.compare_at_price | money_format %}  {% assign compare_at_price_number = compare_at_price | remove_tags | to_number %}
+                  {% if compare_at_price_number > regular_price_number %}
+                    {% assign full_price = compare_at_price_number %}
+                  {% else %}
+                    {% assign full_price = regular_price_number %}
+                  {% endif %}
+                  {% assign total_full_price = total_full_price | plus: full_price %}
+                {% endfor %}
+                <p class="featured_modal__product-save">Complete your look and save <span>{{ total_full_price | minus: total_regular_price | money }}!</span></p>
             </div>
             <div class="featured_modal__list">
             {% for featured in section.settings.modal_products %}
                 <div class="featured_modal__list-item">
-                </div>
             {% endfor %}
           </div>
           <div class="featured_modal__buttons">
