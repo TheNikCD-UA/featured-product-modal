@@ -526,6 +526,75 @@
     {{ product | structured_data }}
   </script>
 
+   <script type="text/javascript">
+    const productForm = document.getElementById("{{ product_form_id }}");
+    const featuredModal = localStorage.getItem('was_open');
+
+    if (productForm{% if section.settings.modal_onetimeview %} && !featuredModal {% endif %}) {
+      productForm.addEventListener("submit", function(event) {
+        document.getElementById("featured_modal__popup").setAttribute("style", "visibility:visible;opacity:1;");
+        document.getElementById("featured_modal__wrapper").setAttribute("style", "right:0;bottom:0;")
+        localStorage.setItem('was_open', true);
+      });
+    }
+
+    const closeButton = document.getElementById("featured_modal__buttons-add-to-cart");
+
+    if (closeButton) {
+      closeButton.addEventListener("click", function(event) {
+        document.getElementById("featured_modal__popup").removeAttribute("style");
+        document.getElementById("featured_modal__wrapper").removeAttribute("style")
+      });
+    }
+
+ document.getElementById('featured_modal__buttons-add-to-cart').addEventListener('click', function() {
+  var products = document.querySelectorAll('.featured_modal__list-item__content .featured_modal__list-item__sku');
+  var promises = [];
+
+  function addProductToCart(product, delay) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        var variantId = product.getAttribute('data-variant-id');
+
+        if (variantId) {
+          var formData = {
+            id: variantId,
+            quantity: 1
+          };
+
+          fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(response => {
+            return response.json();
+          })
+          .then(data => {
+            resolve(data);
+          });
+        } else {
+          reject('Variant ID not found');
+        }
+      }, delay);
+    });
+  }
+
+  var promises = [];
+  products.forEach((product, index) => {
+    promises.push(addProductToCart(product, index * 500));
+  });
+
+  Promise.all(promises).then(() => {
+    fetch('/cart.js')
+      .then(response => response.json());
+  });
+});
+  </script>
+
   {% if product.media.size > 0 %}
     <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
