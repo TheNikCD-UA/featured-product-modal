@@ -446,6 +446,32 @@
     </div>
   </section>
 
+  {% if section.settings.modal_status %}
+    <div id="featured_modal__popup">
+      <div id="featured_modal__wrapper">
+        <div class="featured_modal__photo">
+          {{ section.settings.modal_image | image_url: width: 500 | image_tag }}
+        </div>
+        <div class="featured_modal__text">
+            <h3 class="featured_modal__heading">{{ section.settings.modal_heading }}</h3>
+            <div class="featured_modal__info">
+                <p>You are trying to add <span class="featured_modal__product-title">{{ product.title }}</span> to the cart.</p>
+            </div>
+            <div class="featured_modal__list">
+            {% for featured in section.settings.modal_products %}
+                <div class="featured_modal__list-item">
+                </div>
+            {% endfor %}
+          </div>
+          <div class="featured_modal__buttons">
+              <button id="featured_modal__buttons-add-to-cart" href="/cart" class="button featured_modal__buttons-add-to-cart button--primary">Add to cart</button>
+              <a href="/cart" class="button featured_modal__buttons-continue-to-cart button--secondary" id="close-popup">Continue to the Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
   {%- if section.settings.image_zoom == 'hover' -%}
     <script id="EnableZoomOnHover-featured" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
